@@ -1,0 +1,26 @@
+/*
+    Namespacing strategy:
+        tda-* : applies to To Do App (TDA stands for To Do App). Used to distinguish from third-party or official CSS.
+        tda-site-* : applies to the entire site
+*/
+
+.tda-site-header {
+    background-color: lightblue;
+    padding: 1rem;
+}
+
+.tda-site-navbar ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.tda-site-main {
+    min-height: 50vh;
+    margin-left: 1rem;
+}
+
+.tda-site-footer {
+    background-color: lightblue;
+    padding: 1rem;
+}
