@@ -17,7 +17,8 @@
                 <li><a href="#">Home</a></li>
                 <li><a href="#">To Do List</a></li>
                 <li><a href="#">Admin</a></li>
-                <li><a href="#">Log In / Sign Up</a></li>
+                <li><a href="#">Sign In</a></li>
+                <li><a href="<cfoutput>#cgi.context_path#</cfoutput>/Root/sign-up.cfm">Sign Up</a></li>
             </ul>
         </nav>
         <main id="main-content" class="tda-site-main">

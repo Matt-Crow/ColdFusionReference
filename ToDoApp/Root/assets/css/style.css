@@ -24,3 +24,9 @@
     background-color: lightblue;
     padding: 1rem;
 }
+
+.tda-form-fields {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    column-gap: 1em;
+}
