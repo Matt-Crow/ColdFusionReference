@@ -5,7 +5,7 @@
 */
 
 .tda-site-header {
-    background-color: lightblue;
+    background-image: linear-gradient(to right, lightblue, orange);
     padding: 1rem;
 }
 
@@ -21,7 +21,7 @@
 }
 
 .tda-site-footer {
-    background-color: lightblue;
+    background-image: linear-gradient(to right, lightblue, orange);
     padding: 1rem;
 }
 
