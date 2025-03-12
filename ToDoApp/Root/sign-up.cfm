@@ -49,7 +49,7 @@
 </cfif>
 
 <h2>Sign up for an account</h2>
-<form action="<cfoutput>#cgi.request_url#</cfoutput>" method="post">
+<form id="sign-up-form" action="<cfoutput>#cgi.request_url#</cfoutput>" method="post">
     <div class="tda-form-fields">
         <cfmodule template="../_tags/form_field_row.cfm"
             name="username"
@@ -68,3 +68,21 @@
         <input type="submit" />
     </div>
 </form>
+
+<!--- client-side validation --->
+<script type="module">
+    import {addFormValidation, field} from "./static/js/validation.js";
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        addFormValidation(
+            "#sign-up-form",
+            [
+                field("Username", "[name='username']", "#username-error")
+                    .matches(/^[a-zA-Z0-9]*$/, "Username may only contain alphanumeric characters.")
+                    .length(5, 20),
+                field("Password", "[name='password']", "#password-error")
+                    .length(5, 20)        
+            ]
+        );
+    });
+</script>
