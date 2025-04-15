@@ -59,6 +59,18 @@ class Field {
     }
 
     /**
+     * Adds a validation rule that this field is required.
+     * @returns {Field} this, for chaining.
+     */
+    required() {
+        this.#validators.push(new Validator(
+            value => value !== "",
+            `${this.#label} is required.`
+        ));
+        return this;
+    }
+
+    /**
      * Adds a validation rule that this field's text be within the specified range.
      * @param {number} min minimum length of this text field.
      * @param {number} max maximum length of this text field.

@@ -1,3 +1,5 @@
+<cfset variables.users = createObject("component", "_services.UserService") />
+
 <cfset variables.username_error = "" />
 <cfset variables.password_error = "" />
 
@@ -29,7 +31,7 @@
 
     <cfif variables.username_error eq "" and variables.password_error eq "">
         <cfset variables.salt="#hash(generateSecretKey("AES"), "SHA-512")#" />
-        <cfset variables.passwordHash="#hash(form.password & variables.salt, "SHA-512")#" />
+        <cfset variables.passwordHash=users.hashPassword(password=form.password, salt=variables.salt) />
 
         <cfquery datasource="cf_db">
             INSERT INTO tda.users (
@@ -43,22 +45,8 @@
             );
         </cfquery>
 
-        <!--- log the user in --->
-        <cfquery datasource="cf_db" name="get_user">
-            SELECT
-                user_id,
-                user_name,
-                is_admin
-            FROM tda.users
-            WHERE user_name = <cfqueryparam value="#variables.username#" />
-            LIMIT 1;
-        </cfquery>
-
-        <cfset session.user = structNew() />
-        <cfset session.user.user_id = get_user.user_id />
-        <cfset session.user.user_name = get_user.user_name />
-        <cfset session.user.is_admin = get_user.is_admin />
-
+        <!--- sign the user in --->
+        <cfset variables.users.signIn(variables.username) />
         <cflocation url="#cgi.context_path#/Root/index.cfm" />
     </cfif>
 </cfif>

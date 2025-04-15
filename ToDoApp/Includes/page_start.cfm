@@ -27,10 +27,9 @@
                     </cfif>
                     <li><a href="<cfoutput>#cgi.context_path#</cfoutput>/Root/sign-out.cfm">Sign Out</a></li>
                 <cfelse />
-                    <li><a href="#">Sign In</a></li>
+                    <li><a href="<cfoutput>#cgi.context_path#</cfoutput>/Root/sign-in.cfm">Sign In</a></li>
                     <li><a href="<cfoutput>#cgi.context_path#</cfoutput>/Root/sign-up.cfm">Sign Up</a></li>
                 </cfif>
             </ul>
         </nav>
         <main id="main-content" class="tda-site-main">
-        <cfdump var="#session#" />

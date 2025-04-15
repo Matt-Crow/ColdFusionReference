@@ -30,3 +30,7 @@
     grid-template-columns: repeat(3, max-content);
     column-gap: 1em;
 }
+
+.tda-error {
+    color: red;
+}
