@@ -20,7 +20,7 @@
         <cfset variables.users = createObject("component", "_services.UserService") />
         <cfif get_user.password_hash eq variables.users.hashPassword(password=form.password, salt=get_user.password_salt)>
             <cfset variables.users.signIn(variables.username) />
-            <cflocation url="#cgi.context_path#/Root/index.cfm" />
+            <cflocation url="#application.root#index.cfm" />
         </cfif> 
     </cfif>
 

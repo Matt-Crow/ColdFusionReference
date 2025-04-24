@@ -47,7 +47,7 @@
 
         <!--- sign the user in --->
         <cfset variables.users.signIn(variables.username) />
-        <cflocation url="#cgi.context_path#/Root/index.cfm" />
+        <cflocation url="#application.root#index.cfm" />
     </cfif>
 </cfif>
 
