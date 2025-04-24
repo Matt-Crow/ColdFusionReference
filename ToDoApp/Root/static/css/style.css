@@ -31,6 +31,26 @@
     column-gap: 1em;
 }
 
+.tda-table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 5px solid black;
+}
+
+.tda-table thead {
+    background-image: linear-gradient(to right, lightblue, orange);
+    border-bottom: 5px solid black;
+}
+
+.tda-table tbody tr:nth-child(odd) {
+    background-color: lightblue;
+}
+
+.tda-table th,td {
+    padding: 5px;
+}
+
 .tda-error {
     color: red;
 }

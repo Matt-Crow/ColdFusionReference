@@ -23,7 +23,7 @@
                 <cfif variables.users.isUserLoggedIn() >
                     <li><a href="#">To Do List</a></li>
                     <cfif variables.users.isUserAdmin() >
-                        <li><a href="#">Admin</a></li>
+                        <li><a href="<cfoutput>#application.root#</cfoutput>admin.cfm">Admin</a></li>
                     </cfif>
                     <li><a href="<cfoutput>#application.root#</cfoutput>sign-out.cfm">Sign Out</a></li>
                 <cfelse />

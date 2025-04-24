@@ -28,3 +28,11 @@ GRANT USAGE ON SCHEMA tda TO Lucee;
 ```
 
 2. create a datasource in Lucee server admin (not web admin) (note: username must be in lowercase)
+
+### Creating an admin user
+Once you've signed up a user, you can promote them to admin by running a database query like so:
+```
+UPDATE tda.users
+SET is_admin = b'1'
+WHERE user_name = 'Admin';
+```
