@@ -6,9 +6,9 @@ My development environment was set up using Lucee on MacOS, but other configurat
 1. download [Lucee Express](https://download.lucee.org/)
 2. unzip it
 3. for ease of development, add this line to `server.xml`, within `<host>`: `<Context path="/to-do-app" docBase="/Users/matt/Repositories/ColdFusionReference/ToDoApp" />`
-4. from the Lucee installation, run `bin/startup.sh` to start the server
-5. go to [http://localhost:8888/to-do-app/root/index.cfm](http://localhost:8888/to-do-app/root/index.cfm)
-6. when you're done, run `bin/shutdown.sh` from the Lucee installation.
+4. create an environment variable `MATT_LUCEE_HOME=/path/to/lucee`
+5. use `run.sh`
+6. go to [http://localhost:8888/to-do-app/root/index.cfm](http://localhost:8888/to-do-app/root/index.cfm)
 
 ### Setting up the database
 
