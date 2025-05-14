@@ -7,5 +7,6 @@ CREATE TABLE tda.users (
     user_name varchar(20) UNIQUE,
     password_hash varchar(128),
     password_salt varchar(128),
-    is_admin bit DEFAULT b'0'
+    is_admin bit DEFAULT b'0',
+    is_deactivated bit DEFAULT b'0'
 );
