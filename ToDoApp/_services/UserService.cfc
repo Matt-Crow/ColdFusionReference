@@ -20,15 +20,59 @@
 
     <!--- hashes a user's password --->
     <cffunction name="hashPassword">
-        <cfargument name="password" />
-        <cfargument name="salt" />
+        <cfargument name="password" required />
+        <cfargument name="salt" required />
 
         <cfreturn hash(arguments.password & arguments.salt, "SHA-512") />
     </cffunction>
 
+    <!--- 
+        checks whether the given user can log in
+        returns an error message if they cannot
+    --->
+    <cffunction name="validateSignIn" returntype="string">
+        <cfargument name="username" required />
+        <cfargument name="password" required />
+
+        <!---
+            A few different things to consider:
+            1. is the username valid?
+            2. is the password valid?
+            3. is the user deactivated?
+        --->
+
+        <cfquery name="get_user" datasource="cf_db">
+            SELECT
+                password_hash,
+                password_salt,
+                is_deactivated
+            FROM tda.users
+            WHERE user_name = <cfqueryparam value="#arguments.username#" />
+            LIMIT 1;
+        </cfquery>
+
+        <!--- user not found - for security, don't tell them that --->
+        <cfif get_user.recordCount eq 0>
+            <cfreturn "Incorrect username or password." />
+        </cfif>
+
+        <!--- wrong password - for security, don't tell them that --->
+        <cfif get_user.password_hash neq this.hashPassword(arguments.password, get_user.password_salt) >
+            <cfreturn "Incorrect username or password." />
+        </cfif>
+
+        <!--- block deactivated users --->
+        <cfif get_user.is_deactivated>
+            <cfreturn "This user is deactivated. Contact an admin for assistance." />
+        </cfif>
+
+        <!--- no errors, so return empty string --->
+        <cfreturn "" />
+    </cffunction>
+
     <!--- signs in a user --->
     <cffunction name="signIn">
-        <cfargument name="username" />
+        <cfargument name="username" required />
 
         <cfquery datasource="cf_db" name="get_user">
             SELECT
