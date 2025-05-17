@@ -26,55 +26,57 @@
             ELSE 'Yes'
         END AS active_status
     FROM tda.users
-    ORDER BY user_id;
+    ORDER BY
+        is_deactivated,
+        user_name;
 </cfquery>
 
 <!--- display the page --->
-<h2>Admin</h2> 
-<section style="margin: 1rem;">
-    <h3>Users</h3>
-    <form id="sign-in-form" action="<cfoutput>#cgi.request_url#</cfoutput>" method="post">
-        <table class="tda-table">
-            <thead>
-                <tr>
-                    <th><!--- checkbox ---></th>
-                    <th>Name</th>
-                    <th>Admin</th>
-                    <th>Active</th>
-                </tr>
-            </thead>
-            <tbody>
-                <cfloop array="#get_users#" item="user">
-                    <tr data-tda-active="<cfoutput>#user.active_status#</cfoutput>">
-                        <td><input type="radio" name="user_id" value="<cfoutput encodeFor="htmlattribute">#user.user_id#</cfoutput>" /></td>
-                        <td><cfoutput encodeFor="html">#user.user_name#</cfoutput></td>
-                        <td><cfoutput encodeFor="html">#user.admin_status#</cfoutput></td>
-                        <td><cfoutput encodeFor="html">#user.active_status#</cfoutput></td>
+<cfoutput>
+    <h2>Admin</h2> 
+    <section style="margin: 1rem;">
+        <h3>Users</h3>
+        <form action="#encodeForHtmlAttribute(cgi.request_url)#" method="post">
+            <table class="tda-table">
+                <thead>
+                    <tr>
+                        <th><!--- checkbox ---></th>
+                        <th>Name</th>
+                        <th>Admin</th>
+                        <th>Active</th>
                     </tr>
-                </cfloop>
-            </tbody>
-        </table>
-        <p>Selected: <span id="selected-user-name">none</span></p>
-        <fieldset id="selected-user-actions" disabled>
-            <div class="tda-form-fields">
-                <cfmodule template="../_tags/form_field_row.cfm"
-                    name="is-admin"
-                    label="Admin"
-                    type="checkbox"
-                    />
-                <cfmodule template="../_tags/form_field_row.cfm"
-                    name="is-deactivated"
-                    label="Deactivated"
-                    type="checkbox"
-                    />
-            </div>
-            <button value="submit">Submit</button>
-        </fieldset>
-        
-        <label for="show-deactivated">Show deactivated users</label>
-        <input type="checkbox" id="show-deactivated" />
-    </form>
-</section>
+                </thead>
+                <tbody>
+                    <cfloop array="#get_users#" item="user">
+                        <tr>
+                            <td><input type="radio" name="user_id" value="#encodeForHtmlAttribute(user.user_id)#" /></td>
+                            <td>#encodeForHtml(user.user_name)#</td>
+                            <td>#encodeForHtml(user.admin_status)#</td>
+                            <td>#encodeForHtml(user.active_status)#</td>
+                        </tr>
+                    </cfloop>
+                </tbody>
+            </table>
+            <br />
+            <fieldset id="selected-user-actions" disabled>
+                <legend>Selected user: <span id="selected-user-name">none</span></legend>
+                <div class="tda-form-fields">
+                    <cfmodule template="../_tags/form_field_row.cfm"
+                        name="is-admin"
+                        label="Admin"
+                        type="checkbox"
+                        />
+                    <cfmodule template="../_tags/form_field_row.cfm"
+                        name="is-deactivated"
+                        label="Deactivated"
+                        type="checkbox"
+                        />
+                </div>
+                <button value="submit">Submit</button>
+            </fieldset>
+        </form>
+    </section>
+</cfoutput>
 
 <script type="module">
     // here's a very helpful trick for passing data from ColdFusion to JavaScript
@@ -93,20 +95,5 @@
                 document.querySelector("#is-deactivated").checked = selectedUser.active_status === "No";
             });
         }
-
-        const showDeactivatedCheckbox = document.querySelector("#show-deactivated");
-        showDeactivatedCheckbox.addEventListener("click", _ => showHideDeactivatedUsers());
-
-        showHideDeactivatedUsers();
     });
-
-    function showHideDeactivatedUsers() {
-        const choice = document.querySelector("#show-deactivated").checked;
-        const display = choice ? "" : "none"
-
-        const deactivatedRows = document.querySelectorAll("[data-tda-active='No']");
-        for (const deactivatedRow of deactivatedRows) {
-            deactivatedRow.style.display = display;
-        }
-    }
 </script>
