@@ -8,33 +8,8 @@
 
 <!--- check if we need to handle post request --->
 <cfif not structIsEmpty(form)>
-    <cfif form.action eq "set-admin-yes">
-        <cfquery datasource="cf_db">
-            UPDATE tda.users
-            SET is_admin = b'1'
-            WHERE user_id = <cfqueryparam value="#form.user_id#" cfsqltype="cf_sql_integer" />;
-        </cfquery>
-    <cfelseif form.action eq "set-admin-no">
-        <cfquery datasource="cf_db">
-            UPDATE tda.users
-            SET is_admin = b'0'
-            WHERE user_id = <cfqueryparam value="#form.user_id#" cfsqltype="cf_sql_integer" />;
-        </cfquery>
-    <cfelseif form.action eq "reactivate">
-        <cfquery datasource="cf_db">
-            UPDATE tda.users
-            SET is_deactivated = b'0'
-            WHERE user_id = <cfqueryparam value="#form.user_id#" cfsqltype="cf_sql_integer" />;
-        </cfquery>
-    <cfelseif form.action eq "deactivate">
-        <cfquery datasource="cf_db">
-            UPDATE tda.users
-            SET is_deactivated = b'1'
-            WHERE user_id = <cfqueryparam value="#form.user_id#" cfsqltype="cf_sql_integer" />;
-        </cfquery>
-    <cfelse>
-        <cfthrow message="Unusuppered form action: #form.action#"/>
-    </cfif>
+    <cfset variables.users.setAdmin(form.user_id, structKeyExists(form, "is-admin")) />
+    <cfset variables.users.setDeactivated(form.user_id, structKeyExists(form, "is-deactivated")) />
 </cfif>
 
 <!--- load users --->
@@ -81,10 +56,19 @@
         </table>
         <p>Selected: <span id="selected-user-name">none</span></p>
         <fieldset id="selected-user-actions" disabled>
-            <button name="action" value="set-admin-yes">Make admin</button>
-            <button name="action" value="set-admin-no">Make not admin</button>
-            <button name="action" value="reactivate">Reactivate</button>
-            <button name="action" value="deactivate">Deactivate</button>
+            <div class="tda-form-fields">
+                <cfmodule template="../_tags/form_field_row.cfm"
+                    name="is-admin"
+                    label="Admin"
+                    type="checkbox"
+                    />
+                <cfmodule template="../_tags/form_field_row.cfm"
+                    name="is-deactivated"
+                    label="Deactivated"
+                    type="checkbox"
+                    />
+            </div>
+            <button value="submit">Submit</button>
         </fieldset>
         
         <label for="show-deactivated">Show deactivated users</label>
@@ -105,6 +89,8 @@
 
                 const selectedUser = users.find(user => user.user_id.toString() === userRadioButton.value);
                 document.querySelector("#selected-user-name").innerText = selectedUser.user_name;
+                document.querySelector("#is-admin").checked = selectedUser.admin_status === "Yes";
+                document.querySelector("#is-deactivated").checked = selectedUser.active_status === "No";
             });
         }
 

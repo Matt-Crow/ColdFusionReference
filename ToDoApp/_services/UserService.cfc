@@ -26,6 +26,30 @@
         <cfreturn hash(arguments.password & arguments.salt, "SHA-512") />
     </cffunction>
 
+    <!--- sets whether a user is an admin --->
+    <cffunction name="setAdmin">
+        <cfargument name="user_id" type="number" required />
+        <cfargument name="is_admin" type="boolean" required />
+
+        <cfquery datasource="cf_db">
+            UPDATE tda.users
+            SET is_admin = CASE WHEN <cfqueryparam value="#arguments.is_admin#" cfsqltype="cf_sql_bit" /> THEN b'1' ELSE '0' END
+            WHERE user_id = <cfqueryparam value="#arguments.user_id#" cfsqltype="cf_sql_integer" />;
+        </cfquery>
+    </cffunction>
+
+    <!--- sets whether a user is deactivated --->
+    <cffunction name="setDeactivated">
+        <cfargument name="user_id" type="number" required />
+        <cfargument name="is_deactivated" type="boolean" required />
+
+        <cfquery datasource="cf_db">
+            UPDATE tda.users
+            SET is_deactivated = CASE WHEN <cfqueryparam value="#arguments.is_deactivated#" cfsqltype="cf_sql_bit" /> THEN b'1' ELSE '0' END
+            WHERE user_id = <cfqueryparam value="#arguments.user_id#" cfsqltype="cf_sql_integer" />;
+        </cfquery>
+    </cffunction>
+
     <!--- 
         checks whether the given user can log in
         returns an error message if they cannot
