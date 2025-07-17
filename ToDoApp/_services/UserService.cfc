@@ -18,6 +18,14 @@
         <cfreturn session.user.user_name />
     </cffunction>
 
+    <!--- gets user ID, or 0 if not logged in --->
+    <cffunction name="getUserId">
+        <cfif not this.isUserLoggedIn()>
+            <cfreturn 0 />
+        </cfif>
+        <cfreturn session.user.user_id />
+    </cffunction>
+
     <!--- hashes a user's password --->
     <cffunction name="hashPassword">
         <cfargument name="password" required />

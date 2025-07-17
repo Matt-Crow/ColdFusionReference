@@ -10,3 +10,13 @@ CREATE TABLE tda.users (
     is_admin bit DEFAULT b'0',
     is_deactivated bit DEFAULT b'0'
 );
+
+CREATE TABLE tda.todo_items (
+    todo_item_id serial PRIMARY KEY,
+    creator_user_id integer REFERENCES tda.users,
+    title varchar(64) NOT NULL,
+    description varchar(256) NOT NULL DEFAULT '',
+    is_completed bit NOT NULL DEFAULT b'0',
+    date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_completed timestamp DEFAULT NULL
+);
