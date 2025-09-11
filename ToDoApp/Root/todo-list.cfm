@@ -38,6 +38,7 @@
 
 <cfquery datasource="cf_db" name="get_todos">
     SELECT 
+        todo_item_id,
         title,
         description,
         date_created
@@ -80,7 +81,7 @@
         <tbody>
             <cfloop query="get_todos">
                 <tr>
-                    <td>#encodeForHtml(get_todos.title)#</td>
+                    <td><a href="todo-item.cfm?id=#encodeForHtmlAttribute(get_todos.todo_item_id)#">#encodeForHtml(get_todos.title)#</a></td>
                     <td>#encodeForHtml(get_todos.description)#</td>
                     <td>#dateTimeFormat(get_todos.date_created, "short")#</td>
                 </tr>
