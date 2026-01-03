@@ -10,5 +10,6 @@
     />
 
 <cfset application.root = "#cgi.context_path#/Root/" />
+<cfset application.debug = false />
 
 <cfinclude template="./Includes/page_start.cfm" />

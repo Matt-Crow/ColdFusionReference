@@ -8,6 +8,8 @@ CREATE TABLE tda.users (
     email_address varchar(256) NOT NULL,
     password_hash varchar(128),
     password_salt varchar(128),
+    password_reset_token varchar(40) NULL,
+    password_reset_token_expires timestamp NULL,
     is_admin bit DEFAULT b'0',
     is_deactivated bit DEFAULT b'0'
 );

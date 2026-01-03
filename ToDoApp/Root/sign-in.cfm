@@ -34,6 +34,7 @@
         <input type="submit" />
     </div>
 </form>
+<a href="<cfoutput>#application.root#</cfoutput>forgot-password.cfm">Forgot Password?</a>
 
 <!--- client-side validation --->
 <script type="module">

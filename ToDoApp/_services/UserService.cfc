@@ -121,4 +121,76 @@
         <cfset session.user.user_name = get_user.user_name />
         <cfset session.user.is_admin = get_user.is_admin />
     </cffunction>
+
+    <!--- starts the password reset for the given username --->
+    <cffunction name="handlePasswordResetRequest">
+        <cfargument name="username" required />
+
+
+        <!---
+            Wait for a bit so the amount of time it takes to reset a valid username and fake username are about the same.
+            For example, if it takes 
+                0.1 seconds to check if a user exists
+                3   seconds to send an email 
+                10  seconds to sleep
+            without waiting, this is 0.1 vs 3.1 for an invalid vs a valid username, which is noticeable.
+            With waiting, this goes to 10.1 vs 13.1, which is less of a drastic difference.
+            This prevents malicious users from using the response time to guess which usernames are valid.
+
+            Not sure if this is a good defense, but I thought I'd throw it in there
+        --->
+        <cfsleep time="10000" />
+
+        <!--- first, we need to check if the user exists --->
+        <cfquery datasource="cf_db" name="get_user">
+            SELECT 
+                email_address,
+                password_reset_token_expires,
+                is_deactivated
+            FROM tda.users
+            WHERE user_name = <cfqueryparam value="#arguments.username#" />;
+        </cfquery>
+        <cfif get_user.recordCount eq 0>
+            <cfreturn "User does not exist" />
+        </cfif>
+
+        <!--- cannot reset password if deactivated --->
+        <cfif get_user.is_deactivated>
+            <cfreturn "User is deactivated" />
+        </cfif>
+
+        <!--- ensure they don't already have a pending request --->
+        <cfif 
+            get_user.password_reset_token_expires neq ""
+            and
+            get_user.password_reset_token_expires gt now()
+        >
+            <cfreturn "User already has an active password reset request" />
+        </cfif>
+
+        <!--- generate a new URL token, then send it via a side-channel, such as email --->
+        <cfset url_token = left(hash(generateSecretKey("AES"), "SHA-512"), 40) />
+        <cfset url_token_expires = dateAdd("n", 15, now()) />
+        
+        <cfquery datasource="cf_db">
+            UPDATE tda.users
+            SET
+                password_reset_token = <cfqueryparam value="#url_token#" />,
+                password_reset_token_expires = <cfqueryparam value="#url_token_expires#" cfsqltype="cf_sql_timestamp" />
+            WHERE user_name = <cfqueryparam value="#arguments.username#" />;
+        </cfquery>
+
+        <cfmodule template="../_tags/send_email.cfm" to="#get_user.email_address#" subject="To Do App: Password Reset">
+            <cfoutput>
+                Hello,
+
+                To Do App has received your request to reset your password.
+                <a href="#application.root#reset-password.cfm?token=#url_token#">Click here to reset your password.</a>
+
+                If you did not make this request, you can ignore this email.
+            </cfoutput>
+        </cfmodule>
+
+        <cfreturn "Sent email" />
+    </cffunction>
 </cfcomponent>
