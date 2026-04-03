@@ -193,4 +193,57 @@
 
         <cfreturn "Sent email" />
     </cffunction>
+
+    <!--- finishes a password reset --->
+    <cffunction name="handlePasswordReset">
+        <cfargument name="username" required />
+        <cfargument name="password" required />
+        <cfargument name="url_token" required />
+
+
+        <!--- ensure the user exists --->
+        <cfquery datasource="cf_db" name="get_user">
+            SELECT 
+                password_reset_token_expires,
+                email_address
+            FROM tda.users
+            WHERE user_name = <cfqueryparam value="#arguments.username#" />
+                AND password_reset_token = <cfqueryparam value="#arguments.url_token#" />;
+        </cfquery>
+        <cfif get_user.recordCount eq 0>
+            <cfreturn "Invalid username or password reset token." />
+        </cfif>
+
+        <!--- ensure the token hasn't expired --->
+        <cfif get_user.password_reset_token_expires lt now()>
+            <cfreturn "Password reset token has expired." />
+        </cfif>
+
+        <!--- update the password and invalidate the reset token --->
+        <cfset variables.salt="#hash(generateSecretKey("AES"), "SHA-512")#" />
+        <cfset variables.passwordHash=this.hashPassword(password=arguments.password, salt=variables.salt) />
+        <cfquery datasource="cf_db">
+            UPDATE tda.users
+            SET
+                password_hash = <cfqueryparam value="#variables.passwordHash#" />,
+                password_salt = <cfqueryparam value="#variables.salt#" />,
+                password_reset_token = NULL,
+                password_reset_token_expires = NULL
+            WHERE user_name = <cfqueryparam value="#arguments.username#" />;
+        </cfquery>
+
+        <!--- tell the user their password has been reset --->
+        <cfmodule template="../_tags/send_email.cfm" to="#get_user.email_address#" subject="To Do App: Password Reset">
+            <cfoutput>
+                Hello,
+
+                Your To Do App password has been reset.
+
+                If you did not make this request, please contact support.
+            </cfoutput>
+        </cfmodule>        
+
+        <!--- no errors, so return empty string --->
+        <cfreturn "" />
+    </cffunction>
 </cfcomponent>
