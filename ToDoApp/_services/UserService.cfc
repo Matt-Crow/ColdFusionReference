@@ -1,5 +1,67 @@
 <cfcomponent>
 
+    <!--- 
+        Checks whether a username is valid.
+        Returns an error message,
+        or an empty string if it is valid.
+    --->
+    <cffunction name="validateUsername">
+        <cfargument name="username" required />
+
+        <cfif len(arguments.username) lt 5 or len(arguments.username) gt 20>
+            <cfreturn "Username must be between 5 and 20 characters." />
+        </cfif>
+
+        <cfif reFind("[^a-zA-Z0-9]", arguments.username)>
+            <cfreturn "Username may only contain alphanumeric characters." />
+        </cfif>
+
+        <cfreturn "" />
+    </cffunction>
+
+    <!---
+        Checks whether a password is valid.
+        Returns an error message,
+        or an empty string if it is valid.
+    --->
+    <cffunction name="validatePassword">
+        <cfargument name="password" required />
+
+        <cfif len(arguments.password) lt 5 or len(arguments.password) gt 20>
+            <cfreturn "Password must be between 5 and 20 characters." />
+        </cfif>
+
+        <cfreturn "" />
+    </cffunction>
+
+    <!---
+        Checks whether an email address is valid.
+        Returns an error message,
+        or an empty string if it is valid.
+    --->
+    <cffunction name="validateEmailAddress">
+        <cfargument name="email" required />
+
+        <cfif not isValid("email", arguments.email)>
+            <cfreturn "Email address must be a valid email." />
+        </cfif>
+
+        <cfreturn "" />
+    </cffunction>
+
+    <!--- returns whether a user with the given name exists --->
+    <cffunction name="doesUserExist">
+        <cfargument name="username" required />
+
+        <cfquery datasource="cf_db" name="get_user">
+            SELECT 1
+            FROM tda.users
+            WHERE LOWER(user_name) = <cfqueryparam value="#lcase(arguments.username)#" />;
+        </cfquery>
+
+        <cfreturn get_user.recordCount gt 0 />
+    </cffunction>
+
     <!--- checks whether the user making the current request is logged in --->
     <cffunction name="isUserLoggedIn">
         <cfreturn structKeyExists(session, "user") />

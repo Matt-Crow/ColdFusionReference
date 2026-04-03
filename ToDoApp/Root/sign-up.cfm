@@ -13,25 +13,10 @@
     <cfset variables.email = form.email />
 
     <!--- server-side validation --->
-    <cfif len(form.username) lt 5 or len(form.username) gt 20>
-        <cfset variables.username_error = "Username must be between 5 and 20 characters." />
-    </cfif>
-    <cfif reFind("[^a-zA-Z0-9]", form.username)>
-        <cfset variables.username_error = "Username may only contain alphanumeric characters." />
-    </cfif>
-    <cfif not isValid("email", form.email)>
-        <cfset variables.email_error = "Email address must be a valid email." />
-    </cfif>
-    <cfif len(form.password) lt 5 or len(form.password) gt 20>
-        <cfset variables.password_error = "Password must be between 5 and 20 characters." />
-    </cfif>
-
-    <cfquery name="user_with_that_name" datasource="cf_db">
-        SELECT 1
-        FROM tda.users
-        WHERE LOWER(user_name) = <cfqueryparam value="#lcase(variables.username)#" sqltype="CF_SQL_VARCHAR" maxlength="20" />;
-    </cfquery>
-    <cfif user_with_that_name.recordCount gt 0>
+    <cfset variables.username_error = users.validateUsername(form.username) />
+    <cfset variables.password_error = users.validatePassword(form.password) />
+    <cfset variables.email_error = users.validateEmailAddress(form.email) />
+    <cfif variables.users.doesUserExist(form.username)>
         <cfset variables.username_error = "That username is already in use." />
     </cfif>
 
@@ -68,10 +53,7 @@
 <h2>Sign up for an account</h2>
 <form id="sign-up-form" action="<cfoutput>#cgi.request_url#</cfoutput>" method="post">
     <div class="tda-form-fields">
-        <cfmodule template="../_tags/form_field_row.cfm"
-            name="username"
-            label="Username"
-            type="text"
+        <cfmodule template="../_tags/username_field.cfm"
             value="#variables.username#"
             error="#variables.username_error#"
             />
@@ -82,11 +64,7 @@
             value="#variables.email#"
             error="#variables.email_error#"
             />
-        <cfmodule template="../_tags/form_field_row.cfm"
-            name="password"
-            label="Password"
-            type="password"
-            <!--- do not embed the password in the response, so don't set value --->
+        <cfmodule template="../_tags/password_field.cfm"
             error="#variables.password_error#"
             />
         <input type="submit" />
