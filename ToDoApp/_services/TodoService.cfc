@@ -141,7 +141,7 @@
         <cfargument name="todo_item_id" type="number" required />
         
         <cfif not this.isUserAllowedToTouch(arguments.todo_item_id)>
-            <cfreturn "You are not authorized to delete this todo item." />
+            <cfreturn "You are not authorized to complete this todo item." />
         </cfif>
 
         <cfquery datasource="cf_db">
@@ -166,7 +166,7 @@
         <cfargument name="description" default="" />
         
         <cfif not this.isUserAllowedToTouch(arguments.todo_item_id)>
-            <cfreturn "You are not authorized to delete this todo item." />
+            <cfreturn "You are not authorized to update this todo item." />
         </cfif>
 
         <cfquery datasource="cf_db">
