@@ -1,4 +1,5 @@
 <cfset variables.users = createObject("component", "_services.UserService") />
+<cfset variables.todos = createObject("component", "_services.TodoService").init(variables.users) />
 
 <cfif not variables.users.isUserLoggedIn() >
     <cflocation url="#application.root#index.cfm" />
@@ -15,8 +16,9 @@
     
     <!--- check whether we're handling a create or a delete --->
     <cfif structKeyExists(form, "delete")>
-        <cfset variables.todos = createObject("component", "_services.TodoService").init(variables.users) />
         <cfset variables.error = variables.todos.deleteTodoItemById(form.delete) />
+    <cfelseif structKeyExists(form, "completed")>
+        <cfset variables.error = variables.todos.completeTodoItemById(form.completed) />
     <cfelse>
         <cfset variables.title = trim(form.title) />
         <cfset variables.description = trim(form.description) />
@@ -93,7 +95,10 @@
                         <td><a href="todo-item.cfm?id=#encodeForHtmlAttribute(get_todos.todo_item_id)#">#encodeForHtml(get_todos.title)#</a></td>
                         <td>#encodeForHtml(get_todos.description)#</td>
                         <td>#dateTimeFormat(get_todos.date_created, "short")#</td>
-                        <td><button name="delete" value="#encodeForHtmlAttribute(get_todos.todo_item_id)#" class="tda-button-delete">Delete</button></td>
+                        <td>
+                            <button name="completed" value="#encodeForHtmlAttribute(get_todos.todo_item_id)#">Complete</button>
+                            <button name="delete" value="#encodeForHtmlAttribute(get_todos.todo_item_id)#" class="tda-button-delete">Delete</button>
+                        </td>
                     </tr>
                 </cfloop>
             </form>

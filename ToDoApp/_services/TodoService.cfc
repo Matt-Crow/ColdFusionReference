@@ -54,4 +54,28 @@
 
         <cfreturn "" />
     </cffunction>
+
+    <!---
+        Flags the todo item with the given ID as complete.
+        Returns an error message,
+        or an empty string on success.
+    --->
+    <cffunction name="completeTodoItemById">
+        <cfargument name="todo_item_id" type="number" required />
+        
+        <cfif not this.isUserAllowedToTouch(arguments.todo_item_id)>
+            <cfreturn "You are not authorized to delete this todo item." />
+        </cfif>
+
+        <cfquery datasource="cf_db">
+            UPDATE tda.todo_items
+            SET
+                is_completed = b'1',
+                date_completed = CURRENT_TIMESTAMP
+            WHERE todo_item_id = <cfqueryparam value="#arguments.todo_item_id#" cfsqltype="cf_sql_integer" />
+                AND date_completed IS NULL;
+        </cfquery>
+
+        <cfreturn "" />
+    </cffunction>
 </cfcomponent>

@@ -41,6 +41,12 @@
         <!--- go back to list - the value of get_todo.description is outdated now anyway --->
         <cflocation url="todo-list.cfm" />
         <cfabort />
+    <cfelseif form.action eq "complete">
+        <cfset variables.error = variables.todos.completeTodoItemById(url.id) />
+        <cfif variables.error eq "">
+            <cflocation url="todo-list.cfm" />
+            <cfabort />
+        </cfif>
     <cfelseif form.action eq "delete">
         <cfset variables.error = variables.todos.deleteTodoItemById(url.id) />
         <cfif variables.error eq "">
@@ -68,6 +74,7 @@
             <p>Completed on #dateTimeFormat(get_todo.date_completed, "short")#.</p>
         </cfif>
         <button name="action" value="update">Save Changes</button>
+        <button name="action" value="complete">Complete</button>
         <button name="action" value="delete" class="tda-button-delete">Delete</button>
     </form>
 </cfoutput>
