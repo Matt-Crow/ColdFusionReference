@@ -74,7 +74,9 @@
             <p>Completed on #dateTimeFormat(get_todo.date_completed, "short")#.</p>
         </cfif>
         <button name="action" value="update">Save Changes</button>
-        <button name="action" value="complete">Complete</button>
         <button name="action" value="delete" class="tda-button-delete">Delete</button>
+        <cfif get_todo.is_completed eq 0>
+            <button name="action" value="complete">Complete</button>
+        </cfif>
     </form>
 </cfoutput>

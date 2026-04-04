@@ -50,11 +50,14 @@
         todo_item_id,
         title,
         description,
-        date_created
+        date_created,
+        date_completed
     FROM tda.todo_items
     WHERE creator_user_id = <cfqueryparam value="#variables.user_id#" cfsqltype="cf_sql_integer" />
-        AND is_completed = b'0'
-    ORDER BY date_created;
+    ORDER BY 
+        is_completed,
+        date_created,
+        date_completed;
 </cfquery>
 
 <cfoutput>
@@ -85,6 +88,7 @@
                 <td>Title</td>
                 <td>Description</td>
                 <td>Date created</td>
+                <td>Date completed</td>
                 <td>Action</td>
             </tr>
         </thead>
@@ -95,9 +99,12 @@
                         <td><a href="todo-item.cfm?id=#encodeForHtmlAttribute(get_todos.todo_item_id)#">#encodeForHtml(get_todos.title)#</a></td>
                         <td>#encodeForHtml(get_todos.description)#</td>
                         <td>#dateTimeFormat(get_todos.date_created, "short")#</td>
+                        <td>#dateTimeFormat(get_todos.date_completed, "short")#</td>
                         <td>
-                            <button name="completed" value="#encodeForHtmlAttribute(get_todos.todo_item_id)#">Complete</button>
                             <button name="delete" value="#encodeForHtmlAttribute(get_todos.todo_item_id)#" class="tda-button-delete">Delete</button>
+                            <cfif get_todos.date_completed eq "">
+                                <button name="completed" value="#encodeForHtmlAttribute(get_todos.todo_item_id)#">Complete</button>
+                            </cfif>
                         </td>
                     </tr>
                 </cfloop>
