@@ -22,21 +22,9 @@
     <cfelse>
         <cfset variables.title = trim(form.title) />
         <cfset variables.description = trim(form.description) />
-
-        <!--- validation --->
-        <cfif variables.title eq "">
-            <cfset variables.error &= "Title is required. " />
-        </cfif>
+        <cfset variables.error = variables.todos.createTodoItem(variables.title, variables.description) />
 
         <cfif variables.error eq "">
-            <cfquery datasource="cf_db">
-                INSERT INTO tda.todo_items (creator_user_id, title, description)
-                VALUES (
-                    <cfqueryparam value="#variables.user_id#" cfsqltype="cf_sql_integer" />,
-                    <cfqueryparam value="#variables.title#" />,
-                    <cfqueryparam value="#variables.description#" />
-                );
-            </cfquery>
 
             <!--- clear form values --->
             <cfset variables.title = "" />
@@ -45,20 +33,7 @@
     </cfif>
 </cfif>
 
-<cfquery datasource="cf_db" name="get_todos">
-    SELECT 
-        todo_item_id,
-        title,
-        description,
-        date_created,
-        date_completed
-    FROM tda.todo_items
-    WHERE creator_user_id = <cfqueryparam value="#variables.user_id#" cfsqltype="cf_sql_integer" />
-    ORDER BY 
-        is_completed,
-        date_created,
-        date_completed;
-</cfquery>
+<cfset variables.get_todos = variables.todos.getMyTodoItems() />
 
 <cfoutput>
     <h2>My Todos</h2>

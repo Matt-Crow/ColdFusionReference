@@ -18,41 +18,27 @@
     <cfabort />
 </cfif>
 
-<cfquery datasource="cf_db" name="get_todo">
-    SELECT
-        title,
-        description,
-        is_completed,
-        date_created,
-        date_completed
-    FROM tda.todo_items
-    WHERE todo_item_id = <cfqueryparam value="#url.id#" cfsqltype="cf_sql_integer" />;
-</cfquery>
+<cfset variables.get_todo = variables.todos.getMyTodoItemById(url.id) />
+<cfif isNull(variables.get_todo)>
+    <cflocation url="todo-list.cfm" />
+    <cfabort />
+</cfif>
 
 <!--- check if we are handling post --->
 <cfif not structIsEmpty(form)>
     <cfif form.action eq "update">
-        <cfquery datasource="cf_db">
-            UPDATE tda.todo_items
-            SET description = <cfqueryparam value="#form.description#" />
-            WHERE todo_item_id = <cfqueryparam value="#url.id#" cfsqltype="cf_sql_integer" />;
-        </cfquery>
-
-        <!--- go back to list - the value of get_todo.description is outdated now anyway --->
-        <cflocation url="todo-list.cfm" />
-        <cfabort />
+        <cfset variables.error = variables.todos.updateTodoItemDescription(url.id, trim(form.description)) />
     <cfelseif form.action eq "complete">
         <cfset variables.error = variables.todos.completeTodoItemById(url.id) />
-        <cfif variables.error eq "">
-            <cflocation url="todo-list.cfm" />
-            <cfabort />
-        </cfif>
     <cfelseif form.action eq "delete">
         <cfset variables.error = variables.todos.deleteTodoItemById(url.id) />
-        <cfif variables.error eq "">
-            <cflocation url="todo-list.cfm" />
-            <cfabort />
-        </cfif>
+    <cfelse>
+        <cfset variables.error = "Invalid action: ""#form.action#""." />
+    </cfif>
+
+    <cfif variables.error eq "">
+        <cflocation url="todo-list.cfm" />
+        <cfabort />
     </cfif>
 </cfif>
 
