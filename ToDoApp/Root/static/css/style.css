@@ -51,6 +51,11 @@
     padding: 5px;
 }
 
+.tda-button-delete {
+    background-color: red;
+    font-weight: bold;
+}
+
 .tda-error {
     color: red;
 }

@@ -12,27 +12,34 @@
 
 <!--- check if we need to handle post request --->
 <cfif not structIsEmpty(form)>
-    <cfset variables.title = trim(form.title) />
-    <cfset variables.description = trim(form.description) />
+    
+    <!--- check whether we're handling a create or a delete --->
+    <cfif structKeyExists(form, "delete")>
+        <cfset variables.todos = createObject("component", "_services.TodoService").init(variables.users) />
+        <cfset variables.error = variables.todos.deleteTodoItemById(form.delete) />
+    <cfelse>
+        <cfset variables.title = trim(form.title) />
+        <cfset variables.description = trim(form.description) />
 
-    <!--- validation --->
-    <cfif variables.title eq "">
-        <cfset variables.error &= "Title is required. " />
-    </cfif>
+        <!--- validation --->
+        <cfif variables.title eq "">
+            <cfset variables.error &= "Title is required. " />
+        </cfif>
 
-    <cfif variables.error eq "">
-        <cfquery datasource="cf_db">
-            INSERT INTO tda.todo_items (creator_user_id, title, description)
-            VALUES (
-                <cfqueryparam value="#variables.user_id#" cfsqltype="cf_sql_integer" />,
-                <cfqueryparam value="#variables.title#" />,
-                <cfqueryparam value="#variables.description#" />
-            );
-        </cfquery>
+        <cfif variables.error eq "">
+            <cfquery datasource="cf_db">
+                INSERT INTO tda.todo_items (creator_user_id, title, description)
+                VALUES (
+                    <cfqueryparam value="#variables.user_id#" cfsqltype="cf_sql_integer" />,
+                    <cfqueryparam value="#variables.title#" />,
+                    <cfqueryparam value="#variables.description#" />
+                );
+            </cfquery>
 
-        <!--- clear form values --->
-        <cfset variables.title = "" />
-        <cfset variables.description = "" />
+            <!--- clear form values --->
+            <cfset variables.title = "" />
+            <cfset variables.description = "" />
+        </cfif>
     </cfif>
 </cfif>
 
@@ -53,7 +60,7 @@
     <span class="tda-error">
         #encodeForHTML(variables.error)#
     </span>
-    <form id="create-todo-form" action="#cgi.request_url#" method="post">
+    <form id="create-todo-form" method="post">
         <div class="tda-form-fields">
             <cfmodule template="../_tags/form_field_row.cfm"
                 name="title"
@@ -67,7 +74,7 @@
                 type="text"
                 value="#variables.description#"
                 />
-            <input type="submit" />
+            <input type="submit" name="create" />
         </div>
     </form>
     <table class="tda-table">
@@ -76,16 +83,20 @@
                 <td>Title</td>
                 <td>Description</td>
                 <td>Date created</td>
+                <td>Action</td>
             </tr>
         </thead>
         <tbody>
-            <cfloop query="get_todos">
-                <tr>
-                    <td><a href="todo-item.cfm?id=#encodeForHtmlAttribute(get_todos.todo_item_id)#">#encodeForHtml(get_todos.title)#</a></td>
-                    <td>#encodeForHtml(get_todos.description)#</td>
-                    <td>#dateTimeFormat(get_todos.date_created, "short")#</td>
-                </tr>
-            </cfloop>
+            <form method="post">
+                <cfloop query="get_todos">
+                    <tr>
+                        <td><a href="todo-item.cfm?id=#encodeForHtmlAttribute(get_todos.todo_item_id)#">#encodeForHtml(get_todos.title)#</a></td>
+                        <td>#encodeForHtml(get_todos.description)#</td>
+                        <td>#dateTimeFormat(get_todos.date_created, "short")#</td>
+                        <td><button name="delete" value="#encodeForHtmlAttribute(get_todos.todo_item_id)#" class="tda-button-delete">Delete</button></td>
+                    </tr>
+                </cfloop>
+            </form>
         </tbody>
     </table>
 </cfoutput>
