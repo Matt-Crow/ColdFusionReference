@@ -13,6 +13,6 @@
     <cfoutput>
         <label for="#attributes.name#">#attributes.label#</label>
         <input type="#attributes.type#" id="#attributes.name#" name="#attributes.name#" value="#encodeForHTMLAttribute(attributes.value)#" />
-        <span class="tda-error" id="#attributes.name#-error">#attributes.error#</span>
+        <span class="tda-error" id="#attributes.name#-error">#encodeForHtml(attributes.error)#</span>
     </cfoutput>
 </cfif>

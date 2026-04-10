@@ -26,6 +26,7 @@
                         <cfif variables.users.isUserAdmin() >
                             <li><a href="#application.root#admin.cfm">Admin</a></li>
                         </cfif>
+                        <li><a href="#application.root#profile.cfm">Profile</a></li>
                         <li><a href="#application.root#sign-out.cfm">Sign Out</a></li>
                     <cfelse />
                         <li><a href="#application.root#sign-in.cfm">Sign In</a></li>
