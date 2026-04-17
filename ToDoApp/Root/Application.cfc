@@ -10,7 +10,10 @@
         You may need to restart ColdFusion to pick up changes to this method.
     --->
     <cffunction name="onApplicationStart">
-        <cfset application.root = "" />
+
+        <!--- prevents issues with nested folders --->
+        <cfset application.root = "#cgi.context_path#/" />
+
         <cfset application.debug = false />
     </cffunction>
 
