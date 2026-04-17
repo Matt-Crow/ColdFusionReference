@@ -48,7 +48,7 @@
     <span class="tda-error">#encodeForHtml(variables.error)#</span>
     <form id="update-todo-form" action="#cgi.request_url#" method="post">
         <div class="tda-form-fields">
-            <cfmodule template="../_tags/form_field_row.cfm"
+            <cfmodule template="../customtags/form_field_row.cfm"
                 name="description"
                 label="Description"
                 type="text"

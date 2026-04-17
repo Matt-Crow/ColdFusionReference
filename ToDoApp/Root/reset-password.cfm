@@ -31,11 +31,11 @@
     <span class="tda-error">#encodeForHTML(variables.error)#</span>
     <form id="reset-password-form" method="post">
         <div class="tda-form-fields">
-            <cfmodule template="../_tags/username_field.cfm"
+            <cfmodule template="../customtags/username_field.cfm"
                 value="#variables.username#"
                 error="#variables.username_error#"
                 />
-            <cfmodule template="../_tags/password_field.cfm"
+            <cfmodule template="../customtags/password_field.cfm"
                 error="#variables.password_error#"
                 />
             <input type="submit" />

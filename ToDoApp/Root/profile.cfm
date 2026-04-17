@@ -52,11 +52,11 @@
     <span class="tda-success">#encodeForHtml(variables.success_message)#</span>
     <form id="update-user-form" method="post">
         <div class="tda-form-fields">
-            <cfmodule template="../_tags/username_field.cfm"
+            <cfmodule template="../customtags/username_field.cfm"
                 value="#variables.username#"
                 error="#variables.username_error#"
                 />
-            <cfmodule template="../_tags/form_field_row.cfm"
+            <cfmodule template="../customtags/form_field_row.cfm"
                 name="email"
                 label="Email address"
                 type="email"

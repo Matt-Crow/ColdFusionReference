@@ -242,7 +242,7 @@
             WHERE user_name = <cfqueryparam value="#arguments.username#" />;
         </cfquery>
 
-        <cfmodule template="../_tags/send_email.cfm" to="#get_user.email_address#" subject="To Do App: Password Reset">
+        <cfmodule template="../customtags/send_email.cfm" to="#get_user.email_address#" subject="To Do App: Password Reset">
             <cfoutput>
                 Hello,
 
@@ -295,7 +295,7 @@
         </cfquery>
 
         <!--- tell the user their password has been reset --->
-        <cfmodule template="../_tags/send_email.cfm" to="#get_user.email_address#" subject="To Do App: Password Reset">
+        <cfmodule template="../customtags/send_email.cfm" to="#get_user.email_address#" subject="To Do App: Password Reset">
             <cfoutput>
                 Hello,
 

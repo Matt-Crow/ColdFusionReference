@@ -61,12 +61,12 @@
             <fieldset id="selected-user-actions" disabled>
                 <legend>Selected user: <span id="selected-user-name">none</span></legend>
                 <div class="tda-form-fields">
-                    <cfmodule template="../_tags/form_field_row.cfm"
+                    <cfmodule template="../customtags/form_field_row.cfm"
                         name="is-admin"
                         label="Admin"
                         type="checkbox"
                         />
-                    <cfmodule template="../_tags/form_field_row.cfm"
+                    <cfmodule template="../customtags/form_field_row.cfm"
                         name="is-deactivated"
                         label="Deactivated"
                         type="checkbox"

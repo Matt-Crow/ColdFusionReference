@@ -42,13 +42,13 @@
     </span>
     <form id="create-todo-form" method="post">
         <div class="tda-form-fields">
-            <cfmodule template="../_tags/form_field_row.cfm"
+            <cfmodule template="../customtags/form_field_row.cfm"
                 name="title"
                 label="Title"
                 type="text"
                 value="#variables.title#"
                 />
-            <cfmodule template="../_tags/form_field_row.cfm"
+            <cfmodule template="../customtags/form_field_row.cfm"
                 name="description"
                 label="Description"
                 type="text"

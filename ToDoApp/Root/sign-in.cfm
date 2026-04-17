@@ -19,13 +19,13 @@
 </span>
 <form id="sign-in-form" action="<cfoutput>#cgi.request_url#</cfoutput>" method="post">
     <div class="tda-form-fields">
-        <cfmodule template="../_tags/form_field_row.cfm"
+        <cfmodule template="../customtags/form_field_row.cfm"
             name="username"
             label="Username"
             type="text"
             value="#variables.username#"
             />
-        <cfmodule template="../_tags/form_field_row.cfm"
+        <cfmodule template="../customtags/form_field_row.cfm"
             name="password"
             label="Password"
             type="password"

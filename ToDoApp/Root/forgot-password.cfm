@@ -28,7 +28,7 @@
     <p>#message#</p>
     <form id="forgot-password-form" action="forgot-password.cfm" method="post">
         <div class="tda-form-fields">
-            <cfmodule template="../_tags/form_field_row.cfm"
+            <cfmodule template="../customtags/form_field_row.cfm"
                 name="username"
                 label="Username"
                 type="text"
