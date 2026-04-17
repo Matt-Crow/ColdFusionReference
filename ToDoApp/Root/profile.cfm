@@ -1,4 +1,4 @@
-<cfset variables.users = createObject("component", "_services.UserService") />
+<cfset variables.users = new cfcs.UserService() />
 
 <cfif not variables.users.isUserLoggedIn() >
     <cflocation url="#application.root#index.cfm" />

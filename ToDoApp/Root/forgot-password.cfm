@@ -9,12 +9,12 @@
     </cfif>
     
     <cfif len(variables.username_error) eq 0>
-        <cfset users = createObject("component", "_services.UserService") />
+        <cfset users = new cfcs.UserService() />
         <cftry>
             <cfset password_reset_message = users.handlePasswordResetRequest(trim(form.username)) />
             <cfset message = "If this username exists, check your email inbox for a password reset link." />
             <cfcatch>
-                <cfset logger = createObject("component", "_services.LoggingService") />
+                <cfset logger = new cfcs.LoggingService() />
                 <cfset logger.logError(cfcatch, "An error occurred while resetting a password") />
                 <cfset message="An error occurred, please try again later." />
             </cfcatch>

@@ -1,4 +1,4 @@
-<cfset variables.users = createObject("component", "_services.UserService") />
+<cfset variables.users = new cfcs.UserService() />
 
 <cfset variables.username_error = "" />
 <cfset variables.email_error = "" />

@@ -17,7 +17,7 @@
 
     <cfif variables.error eq "" and variables.username_error eq "" and variables.password_error eq "">
 
-        <cfset variables.users = createObject("component", "_services.UserService") />
+        <cfset variables.users = new cfcs.UserService() />
         <cfset variables.error = variables.users.handlePasswordReset(form.username, form.password, url.token) />
         <cfif variables.error eq "">
             <cfset variables.message = "Your password has been reset!" />

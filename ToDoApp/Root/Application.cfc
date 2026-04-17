@@ -3,7 +3,7 @@
 
     <!--- allow pages to access files outside of root --->
     <cfset this.appBasePath = getDirectoryFromPath(getCurrentTemplatePath()) />
-    <cfset this.mappings["/_services"] = this.appBasePath & "../_services" />
+    <cfset this.mappings["/cfcs"] = this.appBasePath & "../cfcs" />
 
     <!---
         onApplicationStart is called ONCE when the application starts for the first time.

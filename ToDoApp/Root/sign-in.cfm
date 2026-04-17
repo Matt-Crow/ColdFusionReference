@@ -5,7 +5,7 @@
 <cfif not structIsEmpty(form)>
     <cfset variables.username = form.username />
     
-    <cfset variables.users = createObject("component", "_services.UserService") />
+    <cfset variables.users = new cfcs.UserService() />
     <cfset variables.error = variables.users.validateSignIn(variables.username, form.password) />
     <cfif variables.error eq "">
         <cfset variables.users.signIn(variables.username) />

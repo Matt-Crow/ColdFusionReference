@@ -1,4 +1,4 @@
-<cfset variables.users = createObject("component", "_services.UserService") />
+<cfset variables.users = new cfcs.UserService() />
 
 <cfoutput>
     <!DOCTYPE HTML>

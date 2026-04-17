@@ -1,7 +1,3 @@
-<!---
-    TodoService
-    Provides services related to todo items
---->
 <cfcomponent>
 
     <!--- depends on an instance of UserService --->

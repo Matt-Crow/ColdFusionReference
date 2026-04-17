@@ -3,8 +3,8 @@
     allows users to view, edit, or delete one of their todo items
 --->
 
-<cfset variables.users = createObject("component", "_services.UserService") />
-<cfset variables.todos = createObject("component", "_services.TodoService").init(variables.users) />
+<cfset variables.users = new cfcs.UserService() />
+<cfset variables.todos = new cfcs.TodoService().init(variables.users) />
 <cfset variables.error = "" />
 
 <cfif not structKeyExists(url, "id")>

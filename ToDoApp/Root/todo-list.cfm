@@ -1,5 +1,5 @@
-<cfset variables.users = createObject("component", "_services.UserService") />
-<cfset variables.todos = createObject("component", "_services.TodoService").init(variables.users) />
+<cfset variables.users = new cfcs.UserService() />
+<cfset variables.todos = new cfcs.TodoService().init(variables.users) />
 
 <cfif not variables.users.isUserLoggedIn() >
     <cflocation url="#application.root#index.cfm" />
