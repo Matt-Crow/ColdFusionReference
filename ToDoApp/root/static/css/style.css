@@ -1,0 +1,65 @@
+/*
+    Namespacing strategy:
+        tda-* : applies to To Do App (TDA stands for To Do App). Used to distinguish from third-party or official CSS.
+        tda-site-* : applies to the entire site
+*/
+
+.tda-site-header {
+    background-image: linear-gradient(to right, lightblue, orange);
+    padding: 1rem;
+}
+
+.tda-site-navbar ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.tda-site-main {
+    min-height: 50vh;
+    margin-left: 1rem;
+}
+
+.tda-site-footer {
+    background-image: linear-gradient(to right, lightblue, orange);
+    padding: 1rem;
+}
+
+.tda-form-fields {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    column-gap: 1em;
+}
+
+.tda-table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 5px solid black;
+}
+
+.tda-table thead {
+    background-image: linear-gradient(to right, lightblue, orange);
+    border-bottom: 5px solid black;
+}
+
+.tda-table tbody tr:nth-child(odd) {
+    background-color: lightblue;
+}
+
+.tda-table th,td {
+    padding: 5px;
+}
+
+.tda-button-delete {
+    background-color: red;
+    font-weight: bold;
+}
+
+.tda-error {
+    color: red;
+}
+
+.tda-success {
+    color: green;
+}
