@@ -16,11 +16,11 @@
 
     <!--- called at the start of each request --->
     <cffunction name="onRequestStart">
-        <cfinclude template="../Includes/page_start.cfm" />
+        <cfinclude template="../includes/page_start.cfm" />
     </cffunction>
 
     <!--- called at the end of each request --->
     <cffunction name="onRequestEnd">
-        <cfinclude template="../Includes/page_end.cfm" />
+        <cfinclude template="../includes/page_end.cfm" />
     </cffunction>
 </cfcomponent>
