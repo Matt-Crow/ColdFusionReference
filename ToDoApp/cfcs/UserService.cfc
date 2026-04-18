@@ -311,17 +311,14 @@
         </cfif>
 
         <!--- update the password and invalidate the reset token --->
-        <cfset variables.salt="#hash(generateSecretKey("AES"), "SHA-512")#" />
-        <cfset variables.passwordHash=this.hashPassword(password=arguments.password, salt=variables.salt) />
         <cfquery datasource="cf_db">
             UPDATE tda.users
             SET
-                password_hash = <cfqueryparam value="#variables.passwordHash#" />,
-                password_salt = <cfqueryparam value="#variables.salt#" />,
                 password_reset_token = NULL,
                 password_reset_token_expires = NULL
             WHERE user_name = <cfqueryparam value="#arguments.username#" />;
         </cfquery>
+        <cfset this.setPassword(arguments.username, arguments.salt) />
 
         <!--- tell the user their password has been reset --->
         <cfmodule template="../customtags/send_email.cfm" to="#get_user.email_address#" subject="To Do App: Password Reset">
@@ -336,5 +333,22 @@
 
         <!--- no errors, so return empty string --->
         <cfreturn "" />
+    </cffunction>
+
+    <!--- sets a user's password --->
+    <cffunction name="setPassword">
+        <cfargument name="username" required />
+        <cfargument name="password" required />
+
+        <cfset variables.salt="#hash(generateSecretKey("AES"), "SHA-512")#" />
+        <cfset variables.password_hash=this.hashPassword(password=arguments.password, salt=variables.salt) />
+        
+        <cfquery datasource="cf_db">
+            UPDATE tda.users
+            SET
+                password_hash = <cfqueryparam value="#variables.password_hash#" />,
+                password_salt = <cfqueryparam value="#variables.salt#" />
+            WHERE user_name = <cfqueryparam value="#arguments.username#" />;
+        </cfquery>
     </cffunction>
 </cfcomponent>

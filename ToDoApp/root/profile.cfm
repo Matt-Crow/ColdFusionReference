@@ -66,6 +66,7 @@
             <input type="submit" value="Save Changes" />
         </div>
     </form>
+    <a href="#application.root#change-password.cfm">Click here to change your password.</a>
 </cfoutput>
 
 <!--- client-side validation --->
