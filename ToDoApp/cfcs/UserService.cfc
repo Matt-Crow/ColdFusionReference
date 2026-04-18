@@ -93,7 +93,36 @@
         <cfargument name="password" required />
         <cfargument name="salt" required />
 
-        <cfreturn hash(arguments.password & arguments.salt, "SHA-512") />
+
+        <!---
+            Store a pepper outside the database.
+            That way, even if a malicious actor has access to the database, they can't guess the passwords
+        --->
+        <cfif not structKeyExists(server.system.environment, "TDA_PASSWORD_PEPPER")>
+            <cfthrow message="Missing TDA_PASSWORD_PEPPER environment variable." />
+        </cfif>
+        <cfset variables.pepper = server.system.environment.TDA_PASSWORD_PEPPER />
+        <cfif len(variables.pepper) lt 32>
+            <cfthrow message="TDA_PASSWORD_PEPPER environment variable must be at least 32 characters." />
+        </cfif>
+
+        <!---
+            Password guidance taken from: 
+            https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+        --->
+        <cfset variables.work_factor = 600000 />
+        <cfset variables.internal_hash_function = "PBKDF2WithHmacSHA256" />
+        <cfset variables.password_hash_size = 128 />
+
+        <cfset variables.result = generatePBKDFKey(
+            variables.internal_hash_function, 
+            arguments.password & variables.pepper, 
+            arguments.salt, 
+            variables.work_factor, 
+            variables.password_hash_size
+        ) />
+
+        <cfreturn variables.result />
     </cffunction>
 
     <!--- sets whether a user is an admin --->

@@ -1,14 +1,22 @@
 # ColdFusion Reference
 Examples and references for CFML (ColdFusion).
 
-## Local Dev Environment
+
+## Running locally
+After setting up your local environment
+1. use `run.sh`
+2. go to [http://localhost:8888/to-do-app](http://localhost:8888/to-do-app)
+
+
+## Local Dev Environment setup
 My development environment was set up using Lucee on MacOS, but other configurations may work for you.
 1. download [Lucee Express](https://download.lucee.org/)
 2. unzip it
 3. for ease of development, add this line to `server.xml`, within `<host>`: `<Context path="/to-do-app" docBase="/Users/matt/Repositories/ColdFusionReference/ToDoApp/root" />`
 4. create an environment variable `MATT_LUCEE_HOME=/path/to/lucee`
-5. use `run.sh`
-6. go to [http://localhost:8888/to-do-app](http://localhost:8888/to-do-app)
+5. create an environment variable `TDA_PASSWORD_PEPPER=<at least 32 characters>`
+6. restart your shell
+
 
 ### Setting up the database
 
@@ -28,6 +36,7 @@ GRANT USAGE ON SCHEMA tda TO Lucee;
 ```
 
 2. create a datasource in Lucee server admin (not web admin) (note: username must be in lowercase)
+
 
 ### Creating an admin user
 Once you've signed up a user, you can promote them to admin by running a database query like so:
