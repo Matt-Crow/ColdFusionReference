@@ -4,7 +4,7 @@
 --->
 
 <cfset variables.users = new cfcs.UserService() />
-<cfset variables.todos = new cfcs.TodoService().init(variables.users) />
+<cfset variables.todos = new cfcs.TodoService(variables.users) />
 <cfset variables.error = "" />
 
 <cfif not structKeyExists(url, "id")>
